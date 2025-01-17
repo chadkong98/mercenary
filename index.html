@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MERCENARY | XRP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .door-container {
+            height: 100vh;
+            width: 100vw;
+            position: fixed;
+            display: flex;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .door {
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+            position: relative;
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .door::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(0, 0, 0, 0.1),
+                rgba(0, 0, 0, 0.1) 10px,
+                rgba(0, 0, 0, 0.2) 10px,
+                rgba(0, 0, 0, 0.2) 20px
+            );
+        }
+
+        .door.left {
+            transform-origin: left;
+        }
+
+        .door.right {
+            transform-origin: right;
+        }
+
+        .door.left.open {
+            transform: perspective(1000px) rotateY(90deg);
+        }
+
+        .door.right.open {
+            transform: perspective(1000px) rotateY(-90deg);
+        }
+
+        .content {
+            min-height: 200vh;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ff3e3e, #ff8f8f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 62, 62, 0.3);
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: #888;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff3e3e, #ff8f8f);
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 4rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff3e3e;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="door-container">
+        <div class="door left"></div>
+        <div class="door right"></div>
+    </div>
+    
+    <div class="content">
+        <section class="hero">
+            <h1 class="logo">MERCENARY</h1>
+            <p class="tagline">The Future of Combat Finance on XRP</p>
+            <a href="#" class="cta-button">Join the Battalion</a>
+        </section>
+
+        <section class="stats">
+            <div class="stat-card">
+                <div class="stat-value">$1.2M</div>
+                <div class="stat-label">Market Cap</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">2,400</div>
+                <div class="stat-label">Holders</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">8%</div>
+                <div class="stat-label">Reflection Rewards</div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Simple scroll-based door animation
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const threshold = windowHeight * 0.1; // 10% of viewport height
+
+            if (scrollPosition > threshold) {
+                document.querySelector('.door.left').classList.add('open');
+                document.querySelector('.door.right').classList.add('open');
+            } else {
+                document.querySelector('.door.left').classList.remove('open');
+                document.querySelector('.door.right').classList.remove('open');
+            }
+        });
+    </script>
+</body>
+</html>
