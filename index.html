@@ -174,47 +174,52 @@
             transform: translateX(-50%);
         }
 
-        .features {
+        .token-info {
             padding: 100px 20px;
             background: #111;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            background: #1a1a1a;
-            padding: 30px;
-            border-radius: 10px;
-            transition: transform 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .feature-card h3 {
-            color: #ff3e3e;
-            margin-bottom: 15px;
-        }
-
-        .showcase {
-            padding: 100px 20px;
-            background: #0a0a0a;
             text-align: center;
         }
 
-        .showcase img {
-            max-width: 100%;
-            height: auto;
-            margin: 20px 0;
-            border-radius: 10px;
-            box-shadow: 0 0 30px rgba(255, 62, 62, 0.3);
+        .token-info h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ff3e3e;
+            text-transform: uppercase;
+        }
+
+        .token-info p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .token-address {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .buy-link {
+            display: inline-block;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            background: linear-gradient(45deg, #ff3e3e, #ff0000);
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 5px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .buy-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #ff3e3e;
         }
 
         @keyframes glitch {
@@ -241,7 +246,7 @@
     <div class="game-container"></div>
     <div class="crosshair"></div>
     <div class="score">Score: <span id="score">0</span></div>
-    <audio id="gunshot" src="https://assets.mixkit.co/active_storage/sfx/2691/2691-preview.mp3" preload="auto"></audio>
+    <audio id="gunshot" src="https://assets.mixkit.co/active_storage/sfx/2014/2014-preview.mp3" preload="auto"></audio>
 
     <header class="hero">
         <div class="logo">MERCENARY</div>
@@ -252,26 +257,11 @@
         </div>
     </header>
 
-    <section class="features">
-        <div class="features-grid">
-            <div class="feature-card">
-                <h3>XRP Powered</h3>
-                <p>Built on the fastest, most efficient blockchain for instant transactions and minimal fees.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Combat Ready</h3>
-                <p>Enter the battlefield with advanced tokenomics and strategic trading opportunities.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Community Driven</h3>
-                <p>Join a community of warriors dedicated to the success of the mission.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="showcase">
-        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-01-16%20at%208.53.37%E2%80%AFPM-ves6Wxo9yLmdh3WuWlnQUe5GtRtJVF.png" alt="Mercenary Vehicle" />
-        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-01-16%20at%208.53.18%E2%80%AFPM-3jmwsGHsXyKuDHR1rFb2gYBdPBWor8.png" alt="Mercenary Soldier" />
+    <section class="token-info">
+        <h2>MERCENARY Token</h2>
+        <p>MERCENARY is not just a token; it's a weapon in your crypto arsenal. Built on the XRP Ledger, it offers lightning-fast transactions, rock-solid security, and the potential for explosive growth. Are you ready to enlist?</p>
+        <div class="token-address">Token Address: xrp1mercenary000000000000000000000000000000</div>
+        <a href="#" class="buy-link">Buy MERCENARY</a>
     </section>
 
     <script>
@@ -371,5 +361,4 @@
     </script>
 </body>
 </html>
-
 
