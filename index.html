@@ -1,204 +1,429 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MERCENARY | XRP</title>
+    <title>MERCENARY XRP</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+
+        @keyframes flicker {
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            51% { opacity: 1; }
+            52% { opacity: 0.8; }
+            53% { opacity: 1; }
+            54% { opacity: 0.8; }
+            55% { opacity: 1; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes ambientLight {
+            0% { box-shadow: 0 0 50px #ff000033; }
+            50% { box-shadow: 0 0 70px #ff000055; }
+            100% { box-shadow: 0 0 50px #ff000033; }
         }
 
         body {
-            background: #0a0a0a;
+            margin: 0;
+            background-color: #0a0a0a;
             color: #fff;
-            overflow-x: hidden;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+            cursor: none;
         }
-
-        .door-container {
+        
+        .container {
             height: 100vh;
-            width: 100vw;
-            position: fixed;
-            display: flex;
-            z-index: 100;
-            pointer-events: none;
-        }
-
-        .door {
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+            background: 
+                linear-gradient(45deg, rgba(0,0,0,0.95), rgba(20,20,20,0.9)),
+                repeating-linear-gradient(45deg, #111 0%, #111 2%, #0a0a0a 2%, #0a0a0a 4%);
             position: relative;
-            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+            perspective: 1000px;
         }
 
-        .door::after {
+        .container::before {
             content: '';
             position: absolute;
             top: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                45deg,
-                rgba(0, 0, 0, 0.1),
-                rgba(0, 0, 0, 0.1) 10px,
-                rgba(0, 0, 0, 0.2) 10px,
-                rgba(0, 0, 0, 0.2) 20px
-            );
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(255,0,0,0.1) 0%, transparent 60%),
+                radial-gradient(circle at 70% 70%, rgba(255,0,0,0.1) 0%, transparent 60%);
+            pointer-events: none;
+            animation: ambientLight 4s infinite;
         }
 
-        .door.left {
-            transform-origin: left;
+        .weapon-container {
+            position: fixed;
+            bottom: 150px;
+            left: 50%;
+            transform-origin: center;
+            pointer-events: none;
+            z-index: 1000;
+            filter: drop-shadow(0 0 10px rgba(255,0,0,0.3));
         }
 
-        .door.right {
-            transform-origin: right;
-        }
-
-        .door.left.open {
-            transform: perspective(1000px) rotateY(90deg);
-        }
-
-        .door.right.open {
-            transform: perspective(1000px) rotateY(-90deg);
-        }
-
-        .content {
-            min-height: 200vh;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
+        .weapon {
+            width: 800px;
+            height: 400px;
             position: relative;
-            z-index: 1;
+            transform-origin: 25% 50%;
+            transform: translateX(-25%);
         }
 
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            text-align: center;
+        .weapon svg {
+            filter: drop-shadow(0 0 5px rgba(255,0,0,0.5));
+        }
+
+        .muzzle-flash {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #fff, #ff0000, transparent);
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+            filter: blur(2px) brightness(1.5);
+            left: 780px;
+            top: 200px;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px #ff0000;
         }
 
         .logo {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             font-size: 4rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, #ff3e3e, #ff8f8f);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(255, 62, 62, 0.3);
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 
+                0 0 10px rgba(255,0,0,0.7),
+                0 0 20px rgba(255,0,0,0.5),
+                0 0 30px rgba(255,0,0,0.3);
+            animation: flicker 5s infinite;
+            letter-spacing: 4px;
         }
 
-        .tagline {
-            font-size: 1.5rem;
-            color: #888;
-            margin-bottom: 2rem;
+        .bullet-hole {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: radial-gradient(circle, #ff0000 0%, #600 20%, #300 40%, #000 70%);
+            border: 2px solid #ff0000;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            box-shadow: 0 0 10px #ff0000;
         }
 
-        .cta-button {
-            background: linear-gradient(45deg, #ff3e3e, #ff8f8f);
-            border: none;
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            text-decoration: none;
+        .bullet-trace {
+            position: absolute;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ff0000, transparent);
+            transform-origin: left center;
+            pointer-events: none;
+            opacity: 0.7;
+            filter: blur(1px);
         }
 
-        .cta-button:hover {
-            transform: scale(1.05);
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        .menu {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
             gap: 2rem;
-            padding: 4rem 0;
+            z-index: 100;
         }
 
-        .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2rem;
-            border-radius: 10px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
+        .menu-item {
+            padding: 1rem 2rem;
+            border: 2px solid #ff0000;
+            border-radius: 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
             font-weight: bold;
-            color: #ff3e3e;
-            margin-bottom: 0.5rem;
+            background: rgba(20,20,20,0.9);
+            position: relative;
+            overflow: hidden;
         }
 
-        .stat-label {
-            color: #888;
-            font-size: 1.1rem;
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,0,0,0.2), transparent);
+            transition: 0.5s;
         }
 
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 3rem;
-            }
-            
-            .tagline {
-                font-size: 1.2rem;
-            }
+        .menu-item:hover::before {
+            left: 100%;
+        }
+
+        .menu-item:hover {
+            background: rgba(255,0,0,0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(255,0,0,0.5);
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: #ff0000;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        .cursor-lines {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            animation: pulse 2s infinite;
+        }
+
+        .cursor-lines::before,
+        .cursor-lines::after {
+            content: '';
+            position: absolute;
+            background: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        .cursor-lines::before {
+            width: 30px;
+            height: 2px;
+            top: 0;
+            left: -15px;
+        }
+
+        .cursor-lines::after {
+            width: 2px;
+            height: 30px;
+            top: -15px;
+            left: 0;
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100vh;
+            background: linear-gradient(transparent, rgba(255,0,0,0.1), transparent);
+            pointer-events: none;
+            animation: scanline 10s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
         }
     </style>
 </head>
 <body>
-    <div class="door-container">
-        <div class="door left"></div>
-        <div class="door right"></div>
-    </div>
-    
-    <div class="content">
-        <section class="hero">
-            <h1 class="logo">MERCENARY</h1>
-            <p class="tagline">The Future of Combat Finance on XRP</p>
-            <a href="#" class="cta-button">Join the Battalion</a>
-        </section>
+    <div class="container">
+        <div class="scan-line"></div>
+        <h1 class="logo">MERCENARY</h1>
+        <div class="weapon-container">
+            <div class="weapon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+                    <!-- Gun Body - More angular and aggressive -->
+                    <path d="M200 170 L600 170 L630 190 L630 250 L600 270 L200 270 L170 250 L170 190 Z" 
+                          fill="url(#metallic)" stroke="#ff0000" stroke-width="2"/>
+                    
+                    <!-- Barrel -->
+                    <path d="M600 190 L750 190 L750 250 L600 250" 
+                          fill="url(#metallic-dark)" stroke="#ff0000" stroke-width="2"/>
+                    
+                    <!-- Muzzle -->
+                    <path d="M750 180 L780 180 L790 190 L790 250 L780 260 L750 260" 
+                          fill="#151515" stroke="#ff0000" stroke-width="2"/>
+                    
+                    <!-- Stock -->
+                    <path d="M200 170 L100 140 L70 220 L100 300 L200 270" 
+                          fill="url(#metallic-dark)" stroke="#ff0000" stroke-width="2"/>
+                    
+                    <!-- Grip -->
+                    <path d="M350 270 L370 340 L330 340 L310 270" 
+                          fill="url(#metallic)" stroke="#ff0000" stroke-width="2"/>
+                    
+                    <!-- Magazine -->
+                    <path d="M280 270 L300 360 L260 360 L240 270" 
+                          fill="url(#metallic)" stroke="#ff0000" stroke-width="2"/>
+                    
+                    <!-- Scope -->
+                    <rect x="400" y="120" width="120" height="50" 
+                          fill="url(#metallic-dark)" stroke="#ff0000" stroke-width="2"/>
+                    <circle cx="460" cy="145" r="15" 
+                            fill="#000000" stroke="#ff0000" stroke-width="2"/>
+                    
+                    <!-- Additional Details -->
+                    <rect x="650" y="185" width="20" height="70" 
+                          fill="#151515" stroke="#ff0000" stroke-width="1"/>
+                    <rect x="680" y="185" width="20" height="70" 
+                          fill="#151515" stroke="#ff0000" stroke-width="1"/>
+                    <rect x="710" y="185" width="20" height="70" 
+                          fill="#151515" stroke="#ff0000" stroke-width="1"/>
+                    
+                    <!-- Highlights -->
+                    <path d="M200 170 L600 170 L630 190" 
+                          fill="none" stroke="#ff0000" stroke-width="2" opacity="0.8"/>
+                    
+                    <!-- XRP Branding -->
+                    <text x="420" y="220" 
+                          fill="#ff0000" font-family="Arial" font-size="28" font-weight="bold">XRP</text>
 
-        <section class="stats">
-            <div class="stat-card">
-                <div class="stat-value">$1.2M</div>
-                <div class="stat-label">Market Cap</div>
+                    <!-- Metallic Gradients -->
+                    <defs>
+                        <linearGradient id="metallic" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#4a4a4a"/>
+                            <stop offset="50%" style="stop-color:#2a2a2a"/>
+                            <stop offset="100%" style="stop-color:#1a1a1a"/>
+                        </linearGradient>
+                        <linearGradient id="metallic-dark" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#2a2a2a"/>
+                            <stop offset="50%" style="stop-color:#1a1a1a"/>
+                            <stop offset="100%" style="stop-color:#0a0a0a"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <div class="muzzle-flash"></div>
             </div>
-            <div class="stat-card">
-                <div class="stat-value">2,400</div>
-                <div class="stat-label">Holders</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">8%</div>
-                <div class="stat-label">Reflection Rewards</div>
-            </div>
-        </section>
+        </div>
+        <div class="custom-cursor">
+            <div class="cursor-dot"></div>
+            <div class="cursor-lines"></div>
+        </div>
+        <div class="menu">
+            <div class="menu-item">Buy Now</div>
+            <div class="menu-item">Whitepaper</div>
+            <div class="menu-item">Community</div>
+        </div>
     </div>
 
     <script>
-        // Simple scroll-based door animation
-        window.addEventListener('scroll', () => {
-            const scrollPosition = window.scrollY;
-            const windowHeight = window.innerHeight;
-            const threshold = windowHeight * 0.1; // 10% of viewport height
+        const container = document.querySelector('.container');
+        const weaponContainer = document.querySelector('.weapon-container');
+        const weapon = document.querySelector('.weapon');
+        const muzzleFlash = document.querySelector('.muzzle-flash');
+        const cursor = document.querySelector('.custom-cursor');
+        let isMouseDown = false;
 
-            if (scrollPosition > threshold) {
-                document.querySelector('.door.left').classList.add('open');
-                document.querySelector('.door.right').classList.add('open');
-            } else {
-                document.querySelector('.door.left').classList.remove('open');
-                document.querySelector('.door.right').classList.remove('open');
-            }
+        // Create audio context and sound
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function createShootSound() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            // More aggressive sound
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.setValueAtTime(150, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(40, audioContext.currentTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+            
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.2);
+        }
+
+        // Weapon follow mouse movement
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+            
+            cursor.style.left = x + 'px';
+            cursor.style.top = y + 'px';
+
+            const weaponRect = weaponContainer.getBoundingClientRect();
+            const weaponCenterX = weaponRect.left + weaponRect.width / 2;
+            const weaponCenterY = weaponRect.top + weaponRect.height / 2;
+            
+            const angle = Math.atan2(y - weaponCenterY, x - weaponCenterX);
+            weaponContainer.style.transform = `rotate(${angle}rad)`;
         });
+
+        document.addEventListener('mousedown', (e) => {
+            isMouseDown = true;
+            shoot(e);
+        });
+
+        document.addEventListener('mouseup', () => {
+            isMouseDown = false;
+        });
+
+        function shoot(e) {
+            createShootSound();
+
+            const bulletHole = document.createElement('div');
+            bulletHole.className = 'bullet-hole';
+            bulletHole.style.left = e.clientX + 'px';
+            bulletHole.style.top = e.clientY + 'px';
+            container.appendChild(bulletHole);
+
+            // Enhanced muzzle flash effect
+            muzzleFlash.style.opacity = '1';
+            muzzleFlash.style.transform = 'translate(-50%, -50%) scale(1.2)';
+            
+            setTimeout(() => {
+                muzzleFlash.style.opacity = '0';
+                muzzleFlash.style.transform = 'translate(-50%, -50%) scale(1)';
+            }, 50);
+
+            setTimeout(() => {
+                bulletHole.remove();
+            }, 2000);
+
+            // Enhanced screen shake effect
+            container.style.transform = 'translate(2px, 2px)';
+            setTimeout(() => {
+                container.style.transform = 'none';
+            }, 50);
+        }
+
+        // Auto-shoot while mouse is held down
+        setInterval(() => {
+            if (isMouseDown) {
+                shoot({ clientX: cursor.offsetLeft, clientY: cursor.offsetTop });
+            }
+        }, 100);
+
+        // Initialize audio context on first click
+        document.addEventListener('click', () => {
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+        }, { once: true });
     </script>
 </body>
 </html>
