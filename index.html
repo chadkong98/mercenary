@@ -1,98 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MERCENARY XRP</title>
     <style>
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.8; }
-        }
-
-        @keyframes flicker {
-            0% { opacity: 1; }
-            50% { opacity: 0.8; }
-            51% { opacity: 1; }
-            52% { opacity: 0.8; }
-            53% { opacity: 1; }
-            54% { opacity: 0.8; }
-            55% { opacity: 1; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes ambientLight {
-            0% { box-shadow: 0 0 50px #ff000033; }
-            50% { box-shadow: 0 0 70px #ff000055; }
-            100% { box-shadow: 0 0 50px #ff000033; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
         }
 
         body {
-            margin: 0;
             background-color: #0a0a0a;
-            color: #fff;
-            font-family: 'Segoe UI', sans-serif;
-            overflow: hidden;
-            cursor: none;
-        }
-        
-        .container {
-            height: 100vh;
-            background: 
-                linear-gradient(45deg, rgba(0,0,0,0.95), rgba(20,20,20,0.9)),
-                repeating-linear-gradient(45deg, #111 0%, #111 2%, #0a0a0a 2%, #0a0a0a 4%);
-            position: relative;
-            perspective: 1000px;
+            color: #e0e0e0;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        .container::before {
-            content: '';
-            position: absolute;
+        .loader {
+            position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 30% 30%, rgba(255,0,0,0.1) 0%, transparent 60%),
-                radial-gradient(circle at 70% 70%, rgba(255,0,0,0.1) 0%, transparent 60%);
-            pointer-events: none;
-            animation: ambientLight 4s infinite;
-        }
-
-        .weapon-container {
-            position: fixed;
-            bottom: 150px;
-            left: 50%;
-            transform-origin: center;
-            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             z-index: 1000;
-            filter: drop-shadow(0 0 10px rgba(255,0,0,0.3));
+            transition: opacity 1s;
         }
 
-        .weapon {
-            width: 800px;
-            height: 400px;
-            position: relative;
-            transform-origin: 25% 50%;
-            transform: translateX(-25%);
-        }
-
-        .weapon svg {
-            filter: drop-shadow(0 0 5px rgba(255,0,0,0.5));
-        }
-
-        .muzzle-flash {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            background: radial-gradient(circle, #fff, #ff0000, transparent);
-            border-radius: 50%;
+        .loader.fade-out {
             opacity: 0;
             pointer-events: none;
-            filter: blur(2px) brightness(1.5);
-            left: 780px;
-            top: 200px;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 20px #ff0000;
+        }
+
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                        url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/mercen-C5xxQIZfvlPKzBLsQSzgd7o8ZEuSE8.webp');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
         }
 
         .logo {
@@ -100,330 +58,318 @@
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 4rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            color: #fff;
-            text-shadow: 
-                0 0 10px rgba(255,0,0,0.7),
-                0 0 20px rgba(255,0,0,0.5),
-                0 0 30px rgba(255,0,0,0.3);
-            animation: flicker 5s infinite;
-            letter-spacing: 4px;
-        }
-
-        .bullet-hole {
-            position: absolute;
-            width: 15px;
-            height: 15px;
-            background: radial-gradient(circle, #ff0000 0%, #600 20%, #300 40%, #000 70%);
-            border: 2px solid #ff0000;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            box-shadow: 0 0 10px #ff0000;
-        }
-
-        .bullet-trace {
-            position: absolute;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #ff0000, transparent);
-            transform-origin: left center;
-            pointer-events: none;
-            opacity: 0.7;
-            filter: blur(1px);
-        }
-
-        .menu {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 2rem;
-            z-index: 100;
-        }
-
-        .menu-item {
-            padding: 1rem 2rem;
-            border: 2px solid #ff0000;
-            border-radius: 0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
+            font-size: 2em;
             font-weight: bold;
-            background: rgba(20,20,20,0.9);
+            color: #fff;
+            text-shadow: 0 0 10px #ff3e3e;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px #ff3e3e;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+
+        .cta-button {
+            padding: 15px 40px;
+            font-size: 1.2em;
+            background: linear-gradient(45deg, #ff3e3e, #ff0000);
+            border: none;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
             position: relative;
             overflow: hidden;
         }
 
-        .menu-item::before {
-            content: '';
-            position: absolute;
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #ff3e3e;
+        }
+
+        .game-container {
+            position: fixed;
             top: 0;
-            left: -100%;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,0,0,0.2), transparent);
-            transition: 0.5s;
-        }
-
-        .menu-item:hover::before {
-            left: 100%;
-        }
-
-        .menu-item:hover {
-            background: rgba(255,0,0,0.8);
-            transform: translateY(-2px);
-            box-shadow: 0 0 20px rgba(255,0,0,0.5);
-        }
-
-        .custom-cursor {
-            position: fixed;
-            width: 30px;
-            height: 30px;
             pointer-events: none;
-            z-index: 9999;
+            z-index: 2;
+        }
+
+        .target {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 62, 62, 0.8);
+            border-radius: 50%;
+            pointer-events: auto;
+            cursor: crosshair;
+        }
+
+        .bullet {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .score {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5em;
+            color: #ff3e3e;
+            z-index: 3;
+        }
+
+        .crosshair {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            pointer-events: none;
+            z-index: 1000;
+            transform: translate(-50%, -50%);
             mix-blend-mode: difference;
         }
 
-        .cursor-dot {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 4px;
-            height: 4px;
-            background: #ff0000;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 10px #ff0000;
-        }
-
-        .cursor-lines {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(45deg);
-            animation: pulse 2s infinite;
-        }
-
-        .cursor-lines::before,
-        .cursor-lines::after {
+        .crosshair::before,
+        .crosshair::after {
             content: '';
             position: absolute;
-            background: #ff0000;
-            box-shadow: 0 0 10px #ff0000;
+            background: #fff;
+            box-shadow: 0 0 4px rgba(255, 62, 62, 0.8);
         }
 
-        .cursor-lines::before {
-            width: 30px;
+        .crosshair::before {
+            top: 50%;
+            left: 0;
+            width: 100%;
             height: 2px;
-            top: 0;
-            left: -15px;
+            transform: translateY(-50%);
         }
 
-        .cursor-lines::after {
+        .crosshair::after {
+            left: 50%;
+            top: 0;
             width: 2px;
-            height: 30px;
-            top: -15px;
-            left: 0;
+            height: 100%;
+            transform: translateX(-50%);
         }
 
-        .scan-line {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 100vh;
-            background: linear-gradient(transparent, rgba(255,0,0,0.1), transparent);
-            pointer-events: none;
-            animation: scanline 10s linear infinite;
+        .features {
+            padding: 100px 20px;
+            background: #111;
         }
 
-        @keyframes scanline {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-card h3 {
+            color: #ff3e3e;
+            margin-bottom: 15px;
+        }
+
+        .showcase {
+            padding: 100px 20px;
+            background: #0a0a0a;
+            text-align: center;
+        }
+
+        .showcase img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255, 62, 62, 0.3);
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+        .glitch {
+            animation: glitch 0.3s infinite;
+            animation-timing-function: steps(2);
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="scan-line"></div>
-        <h1 class="logo">MERCENARY</h1>
-        <div class="weapon-container">
-            <div class="weapon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
-                    <!-- Gun Body - More angular and aggressive -->
-                    <path d="M200 170 L600 170 L630 190 L630 250 L600 270 L200 270 L170 250 L170 190 Z" 
-                          fill="url(#metallic)" stroke="#ff0000" stroke-width="2"/>
-                    
-                    <!-- Barrel -->
-                    <path d="M600 190 L750 190 L750 250 L600 250" 
-                          fill="url(#metallic-dark)" stroke="#ff0000" stroke-width="2"/>
-                    
-                    <!-- Muzzle -->
-                    <path d="M750 180 L780 180 L790 190 L790 250 L780 260 L750 260" 
-                          fill="#151515" stroke="#ff0000" stroke-width="2"/>
-                    
-                    <!-- Stock -->
-                    <path d="M200 170 L100 140 L70 220 L100 300 L200 270" 
-                          fill="url(#metallic-dark)" stroke="#ff0000" stroke-width="2"/>
-                    
-                    <!-- Grip -->
-                    <path d="M350 270 L370 340 L330 340 L310 270" 
-                          fill="url(#metallic)" stroke="#ff0000" stroke-width="2"/>
-                    
-                    <!-- Magazine -->
-                    <path d="M280 270 L300 360 L260 360 L240 270" 
-                          fill="url(#metallic)" stroke="#ff0000" stroke-width="2"/>
-                    
-                    <!-- Scope -->
-                    <rect x="400" y="120" width="120" height="50" 
-                          fill="url(#metallic-dark)" stroke="#ff0000" stroke-width="2"/>
-                    <circle cx="460" cy="145" r="15" 
-                            fill="#000000" stroke="#ff0000" stroke-width="2"/>
-                    
-                    <!-- Additional Details -->
-                    <rect x="650" y="185" width="20" height="70" 
-                          fill="#151515" stroke="#ff0000" stroke-width="1"/>
-                    <rect x="680" y="185" width="20" height="70" 
-                          fill="#151515" stroke="#ff0000" stroke-width="1"/>
-                    <rect x="710" y="185" width="20" height="70" 
-                          fill="#151515" stroke="#ff0000" stroke-width="1"/>
-                    
-                    <!-- Highlights -->
-                    <path d="M200 170 L600 170 L630 190" 
-                          fill="none" stroke="#ff0000" stroke-width="2" opacity="0.8"/>
-                    
-                    <!-- XRP Branding -->
-                    <text x="420" y="220" 
-                          fill="#ff0000" font-family="Arial" font-size="28" font-weight="bold">XRP</text>
-
-                    <!-- Metallic Gradients -->
-                    <defs>
-                        <linearGradient id="metallic" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#4a4a4a"/>
-                            <stop offset="50%" style="stop-color:#2a2a2a"/>
-                            <stop offset="100%" style="stop-color:#1a1a1a"/>
-                        </linearGradient>
-                        <linearGradient id="metallic-dark" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#2a2a2a"/>
-                            <stop offset="50%" style="stop-color:#1a1a1a"/>
-                            <stop offset="100%" style="stop-color:#0a0a0a"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
-                <div class="muzzle-flash"></div>
-            </div>
-        </div>
-        <div class="custom-cursor">
-            <div class="cursor-dot"></div>
-            <div class="cursor-lines"></div>
-        </div>
-        <div class="menu">
-            <div class="menu-item">Buy Now</div>
-            <div class="menu-item">Whitepaper</div>
-            <div class="menu-item">Community</div>
-        </div>
+    <div class="loader">
+        <h2 class="glitch">LOADING...</h2>
     </div>
 
+    <div class="game-container"></div>
+    <div class="crosshair"></div>
+    <div class="score">Score: <span id="score">0</span></div>
+    <audio id="gunshot" src="https://assets.mixkit.co/active_storage/sfx/2691/2691-preview.mp3" preload="auto"></audio>
+
+    <header class="hero">
+        <div class="logo">MERCENARY</div>
+        <div class="hero-content">
+            <h1>MERCENARY XRP</h1>
+            <p>Where the weak are weeded out and the strong survive. Click to shoot. Survive to earn.</p>
+            <button class="cta-button">Join the Battle</button>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>XRP Powered</h3>
+                <p>Built on the fastest, most efficient blockchain for instant transactions and minimal fees.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Combat Ready</h3>
+                <p>Enter the battlefield with advanced tokenomics and strategic trading opportunities.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Community Driven</h3>
+                <p>Join a community of warriors dedicated to the success of the mission.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="showcase">
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-01-16%20at%208.53.37%E2%80%AFPM-ves6Wxo9yLmdh3WuWlnQUe5GtRtJVF.png" alt="Mercenary Vehicle" />
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-01-16%20at%208.53.18%E2%80%AFPM-3jmwsGHsXyKuDHR1rFb2gYBdPBWor8.png" alt="Mercenary Soldier" />
+    </section>
+
     <script>
-        const container = document.querySelector('.container');
-        const weaponContainer = document.querySelector('.weapon-container');
-        const weapon = document.querySelector('.weapon');
-        const muzzleFlash = document.querySelector('.muzzle-flash');
-        const cursor = document.querySelector('.custom-cursor');
-        let isMouseDown = false;
-
-        // Create audio context and sound
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        
-        function createShootSound() {
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            // More aggressive sound
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.type = 'sawtooth';
-            oscillator.frequency.setValueAtTime(150, audioContext.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(40, audioContext.currentTime + 0.1);
-            
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
-            
-            oscillator.start();
-            oscillator.stop(audioContext.currentTime + 0.2);
-        }
-
-        // Weapon follow mouse movement
-        document.addEventListener('mousemove', (e) => {
-            const x = e.clientX;
-            const y = e.clientY;
-            
-            cursor.style.left = x + 'px';
-            cursor.style.top = y + 'px';
-
-            const weaponRect = weaponContainer.getBoundingClientRect();
-            const weaponCenterX = weaponRect.left + weaponRect.width / 2;
-            const weaponCenterY = weaponRect.top + weaponRect.height / 2;
-            
-            const angle = Math.atan2(y - weaponCenterY, x - weaponCenterX);
-            weaponContainer.style.transform = `rotate(${angle}rad)`;
-        });
-
-        document.addEventListener('mousedown', (e) => {
-            isMouseDown = true;
-            shoot(e);
-        });
-
-        document.addEventListener('mouseup', () => {
-            isMouseDown = false;
-        });
-
-        function shoot(e) {
-            createShootSound();
-
-            const bulletHole = document.createElement('div');
-            bulletHole.className = 'bullet-hole';
-            bulletHole.style.left = e.clientX + 'px';
-            bulletHole.style.top = e.clientY + 'px';
-            container.appendChild(bulletHole);
-
-            // Enhanced muzzle flash effect
-            muzzleFlash.style.opacity = '1';
-            muzzleFlash.style.transform = 'translate(-50%, -50%) scale(1.2)';
-            
+        // Loader
+        window.addEventListener('load', () => {
             setTimeout(() => {
-                muzzleFlash.style.opacity = '0';
-                muzzleFlash.style.transform = 'translate(-50%, -50%) scale(1)';
-            }, 50);
+                document.querySelector('.loader').classList.add('fade-out');
+            }, 1500);
+        });
 
+        // Game mechanics
+        let score = 0;
+        const gameContainer = document.querySelector('.game-container');
+        const scoreElement = document.getElementById('score');
+
+        // Shooting mechanics
+        document.addEventListener('click', (e) => {
+            const bullet = document.createElement('div');
+            bullet.className = 'bullet';
+            bullet.style.left = e.clientX + 'px';
+            bullet.style.top = e.clientY + 'px';
+            gameContainer.appendChild(bullet);
+
+            // Remove bullet after animation
+            setTimeout(() => bullet.remove(), 1000);
+        });
+
+        // Spawn targets
+        function spawnTarget() {
+            const target = document.createElement('div');
+            target.className = 'target';
+            target.style.left = Math.random() * (window.innerWidth - 20) + 'px';
+            target.style.top = Math.random() * (window.innerHeight - 20) + 'px';
+            
+            target.addEventListener('click', () => {
+                score += 100;
+                scoreElement.textContent = score;
+                target.remove();
+                
+                // Visual feedback
+                const explosion = document.createElement('div');
+                explosion.style.position = 'absolute';
+                explosion.style.left = target.style.left;
+                explosion.style.top = target.style.top;
+                explosion.style.width = '40px';
+                explosion.style.height = '40px';
+                explosion.style.background = 'radial-gradient(circle, rgba(255,62,62,0.8) 0%, rgba(255,62,62,0) 70%)';
+                explosion.style.transform = 'translate(-25%, -25%)';
+                gameContainer.appendChild(explosion);
+                
+                setTimeout(() => explosion.remove(), 300);
+            });
+
+            gameContainer.appendChild(target);
+
+            // Remove target after some time if not clicked
             setTimeout(() => {
-                bulletHole.remove();
+                if (target.parentNode === gameContainer) {
+                    target.remove();
+                }
             }, 2000);
-
-            // Enhanced screen shake effect
-            container.style.transform = 'translate(2px, 2px)';
-            setTimeout(() => {
-                container.style.transform = 'none';
-            }, 50);
         }
 
-        // Auto-shoot while mouse is held down
-        setInterval(() => {
-            if (isMouseDown) {
-                shoot({ clientX: cursor.offsetLeft, clientY: cursor.offsetTop });
-            }
-        }, 100);
+        // Spawn targets periodically
+        setInterval(spawnTarget, 1000);
 
-        // Initialize audio context on first click
-        document.addEventListener('click', () => {
-            if (audioContext.state === 'suspended') {
-                audioContext.resume();
-            }
-        }, { once: true });
+        // Parallax effect
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            document.querySelector('.hero-content').style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+
+        // Crosshair movement
+        const crosshair = document.querySelector('.crosshair');
+        document.addEventListener('mousemove', (e) => {
+            crosshair.style.left = e.clientX + 'px';
+            crosshair.style.top = e.clientY + 'px';
+        });
+
+        // Update shooting mechanics to play sound
+        const gunshot = document.getElementById('gunshot');
+        document.addEventListener('click', (e) => {
+            // Play gunshot sound
+            gunshot.currentTime = 0;
+            gunshot.play();
+
+            const bullet = document.createElement('div');
+            bullet.className = 'bullet';
+            bullet.style.left = e.clientX + 'px';
+            bullet.style.top = e.clientY + 'px';
+            gameContainer.appendChild(bullet);
+
+            // Remove bullet after animation
+            setTimeout(() => bullet.remove(), 1000);
+        });
     </script>
 </body>
 </html>
+
+
